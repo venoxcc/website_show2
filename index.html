@@ -1,12 +1,475 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0;url=https://venoxware.vercel.app">
-    <title>Redirecting...</title>
+    <title>Polynom Expander</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #161628;
+            --bg-card: #1a1a2e;
+            --accent-sandy: #d4a574;
+            --accent-sandy-dark: #b8935f;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8b8;
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --shadow-light: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(212, 165, 116, 0.06) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 
+                0 20px 40px var(--shadow-dark),
+                inset 0 1px 0 var(--shadow-light);
+            animation: slideUp 0.8s ease-out;
+            position: relative;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-sandy) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.1); }
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 24px;
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                inset 8px 8px 16px var(--shadow-dark),
+                inset -8px -8px 16px var(--shadow-light);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-sandy);
+            box-shadow: 
+                inset 8px 8px 16px var(--shadow-dark),
+                inset -8px -8px 16px var(--shadow-light),
+                0 0 0 4px rgba(212, 165, 116, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        input[type="text"]::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, var(--accent-sandy) 0%, var(--accent-sandy-dark) 100%);
+            border: none;
+            border-radius: 16px;
+            color: var(--bg-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                12px 12px 24px var(--shadow-dark),
+                -12px -12px 24px var(--shadow-light);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 
+                4px 4px 8px var(--shadow-dark),
+                -4px -4px 8px var(--shadow-light);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            min-height: 80px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+        
+        #result {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-align: center;
+            word-break: break-all;
+            line-height: 1.5;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .result-show {
+            animation: resultSlide 0.5s ease-out;
+        }
+        
+        @keyframes resultSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .credits {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+        
+        .credits:hover {
+            opacity: 1;
+        }
+        
+        .credits a {
+            color: var(--accent-sandy);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 0 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .credits {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 20px;
+                text-align: center;
+            }
+        }
+        
+        /* Loading animation */
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-sandy);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <p>If you are not redirected, <a href="https://venoxware.vercel.app">click here</a>.</p>
+    <div class="container">
+        <h1>Polynom Expander</h1>
+        <p class="subtitle">Erweitere faktorisierte Polynome zu ihrer Standardform</p>
+        
+        <div class="input-group">
+            <label for="polyInput">Polynom in faktorisierter Form eingeben:</label>
+            <div class="input-wrapper">
+                <input type="text" id="polyInput" placeholder="z.B. (x-1)(x+2)" autocomplete="off">
+            </div>
+        </div>
+        
+        <button class="btn" onclick="expandAndShow()">
+            <span id="btnText">Erweitern</span>
+        </button>
+        
+        <div class="result-container">
+            <div id="result">Geben Sie ein Polynom ein und klicken Sie auf "Erweitern"</div>
+        </div>
+    </div>
+    
+    <div class="credits">
+        Erstellt von <a href="#" target="_blank">Finn</a>
+    </div>
+
+    <script>
+        
+        async function expandAndShow() {
+            const input = document.getElementById('polyInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            const btnText = document.getElementById('btnText');
+            const btn = document.querySelector('.btn');
+            
+            if (!input) {
+                resultDiv.textContent = "Bitte geben Sie ein Polynom ein";
+                resultDiv.style.color = "var(--accent-sandy)";
+                return;
+            }
+            
+            btn.classList.add('loading');
+            btnText.textContent = 'Berechnung...';
+            btn.disabled = true;
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const result = expandPolynomial(input);
+            
+            btn.classList.remove('loading');
+            btnText.textContent = 'Erweitern';
+            btn.disabled = false;
+            
+            resultDiv.classList.remove('result-show');
+            setTimeout(() => {
+                resultDiv.textContent = result;
+                resultDiv.style.color = result.includes('Error') || result.includes('Fehler') ? '#ff6b6b' : 'var(--accent-sandy)';
+                resultDiv.classList.add('result-show');
+            }, 100);
+        }
+        
+        document.getElementById('polyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                expandAndShow();
+            }
+        });
+        
+        document.getElementById('polyInput').addEventListener('input', function(e) {
+            const input = e.target;
+            const value = input.value.trim();
+            
+            if (value && !value.match(/^\([^)]*\)\([^)]*\)$/)) {
+                input.style.borderColor = '#ff6b6b';
+            } else {
+                input.style.borderColor = 'transparent';
+            }
+        });
+        // Function to expand a polynomial from factored form to standard form
+function expandPolynomial(input) {
+    // Step 1: Parse the input to extract roots
+    // Remove spaces and 'f(x)=' if present
+    input = input.replace(/\s/g, '').replace(/^f\(x\)=/, '');
+    
+    // Find all terms like (x+a) or (x-a) using regex
+    const termRegex = /\(x([+-]?\d*)\)/g;
+    let matches = [];
+    let match;
+    while ((match = termRegex.exec(input)) !== null) {
+        // Extract the number after x, default to +1 or -1 if no number
+        let num = match[1] === '+' ? 1 : match[1] === '-' ? -1 : parseInt(match[1] || '0');
+        matches.push(num);
+    }
+    
+    // If no matches, return error
+    if (matches.length === 0) {
+        return "Invalid input: No valid (x+a) or (x-a) terms found";
+    }
+    
+    // Step 2: Convert (x-a) to roots (a), so (x-1)(x+2) becomes roots [1, -2]
+    const roots = matches.map(num => -num);
+    
+    // Step 3: Expand the polynomial by multiplying binomials
+    // Start with [1] (represents 1, for the first multiplication)
+    let coeffs = [1];
+    
+    // Multiply by each (x - r) binomial
+    for (let r of roots) {
+        const newCoeffs = new Array(coeffs.length + 1).fill(0);
+        // Multiply current polynomial by (x - r)
+        for (let j = 0; j < coeffs.length; j++) {
+            // x term: coeffs[j] * x -> x^(j+1)
+            newCoeffs[j + 1] += coeffs[j];
+            // constant term: coeffs[j] * (-r) -> x^j
+            newCoeffs[j] += coeffs[j] * -r;
+        }
+        coeffs = newCoeffs;
+    }
+    
+    // Step 4: Format the output polynomial with Unicode superscripts
+    const superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+    let result = '';
+    for (let i = coeffs.length - 1; i >= 0; i--) {
+        let coeff = coeffs[i];
+        if (coeff === 0) continue; // Skip zero coefficients
+        
+        let term = '';
+        if (coeff > 0 && result !== '') {
+            term += '+';
+        } else if (coeff < 0) {
+            term += '-';
+            coeff = Math.abs(coeff);
+        }
+        
+        if (i === 0) {
+            // Constant term
+            term += coeff;
+        } else if (i === 1) {
+            // x term
+            term += coeff === 1 ? 'x' : `${coeff}x`;
+        } else {
+            // x^n term
+            let expStr = i.toString().split('').map(digit => superscripts[parseInt(digit)]).join('');
+            term += coeff === 1 ? `x${expStr}` : `${coeff}x${expStr}`;
+        }
+        
+        result += term;
+    }
+    
+    // Handle the case where the polynomial is zero
+    if (result === '') {
+        return '0';
+    }
+    
+    return result;
+}
+
+
+    </script>
 </body>
 </html>
