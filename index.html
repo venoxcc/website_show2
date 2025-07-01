@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polynom Expander</title>
+    <title>finn polynom rechner</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -68,7 +68,7 @@
             border-radius: 24px;
             padding: 40px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             box-shadow: 
                 0 20px 40px var(--shadow-dark),
                 inset 0 1px 0 var(--shadow-light);
@@ -251,6 +251,46 @@
             }
         }
         
+        .examples {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+        }
+        
+        .examples h3 {
+            color: var(--accent-sandy);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .example-list {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .example-item {
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            background: rgba(212, 165, 116, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .example-item:hover {
+            background: rgba(212, 165, 116, 0.2);
+            color: var(--text-primary);
+        }
+        
         .credits {
             position: fixed;
             bottom: 20px;
@@ -317,13 +357,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Polynom Expander</h1>
-        <p class="subtitle">Erweitere faktorisierte Polynome zu ihrer Standardform</p>
+        <h1>Advanced Polynom Expander</h1>
+        <p class="subtitle">Erweitere Polynome in verschiedensten Formaten zu ihrer Standardform</p>
         
         <div class="input-group">
-            <label for="polyInput">Polynom in faktorisierter Form eingeben:</label>
+            <label for="polyInput">Polynom eingeben (unterstützt viele Formate):</label>
             <div class="input-wrapper">
-                <input type="text" id="polyInput" placeholder="z.B. (x-1)(x+2)" autocomplete="off">
+                <input type="text" id="polyInput" placeholder="z.B. (x-1)²(x+2) oder (x-1)^2*(x+2) oder x²-3x+2" autocomplete="off">
             </div>
         </div>
         
@@ -334,6 +374,21 @@
         <div class="result-container">
             <div id="result">Geben Sie ein Polynom ein und klicken Sie auf "Erweitern"</div>
         </div>
+        
+        <div class="examples">
+            <h3>Unterstützte Formate (klicken zum Testen):</h3>
+            <div class="example-list">
+                <div class="example-item" onclick="setExample('(x-1)(x+2)')">(x-1)(x+2) - Einfache Faktoren</div>
+                <div class="example-item" onclick="setExample('(x-1)²(x+2)')">(x-1)²(x+2) - Mit Unicode Exponenten</div>
+                <div class="example-item" onclick="setExample('(x-1)^2*(x+2)')">(x-1)^2*(x+2) - Mit ^ Exponenten</div>
+                <div class="example-item" onclick="setExample('(2x-4)(x+3)')">(2x-4)(x+3) - Mit Koeffizienten</div>
+                <div class="example-item" onclick="setExample('x²-5x+6')">x²-5x+6 - Bereits erweitert</div>
+                <div class="example-item" onclick="setExample('(x-1)³')">(x-1)³ - Höhere Potenzen</div>
+                <div class="example-item" onclick="setExample('(x+0.5)(x-2.5)')">(x+0.5)(x-2.5) - Dezimalzahlen</div>
+                <div class="example-item" onclick="setExample('(x-1/2)(x+3/4)')">(x-1/2)(x+3/4) - Brüche</div>
+                <div class="example-item" onclick="setExample('x(x-1)(x+2)')">x(x-1)(x+2) - Mit x-Faktor</div>
+            </div>
+        </div>
     </div>
     
     <div class="credits">
@@ -341,6 +396,10 @@
     </div>
 
     <script>
+        function setExample(example) {
+            document.getElementById('polyInput').value = example;
+            expandAndShow();
+        }
         
         async function expandAndShow() {
             const input = document.getElementById('polyInput').value.trim();
@@ -358,20 +417,33 @@
             btnText.textContent = 'Berechnung...';
             btn.disabled = true;
             
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 300));
             
-            const result = expandPolynomial(input);
-            
-            btn.classList.remove('loading');
-            btnText.textContent = 'Erweitern';
-            btn.disabled = false;
-            
-            resultDiv.classList.remove('result-show');
-            setTimeout(() => {
-                resultDiv.textContent = result;
-                resultDiv.style.color = result.includes('Error') || result.includes('Fehler') ? '#ff6b6b' : 'var(--accent-sandy)';
-                resultDiv.classList.add('result-show');
-            }, 100);
+            try {
+                const result = expandPolynomial(input);
+                
+                btn.classList.remove('loading');
+                btnText.textContent = 'Erweitern';
+                btn.disabled = false;
+                
+                resultDiv.classList.remove('result-show');
+                setTimeout(() => {
+                    resultDiv.textContent = result;
+                    resultDiv.style.color = result.includes('Error') || result.includes('Fehler') ? '#ff6b6b' : 'var(--accent-sandy)';
+                    resultDiv.classList.add('result-show');
+                }, 100);
+            } catch (error) {
+                btn.classList.remove('loading');
+                btnText.textContent = 'Erweitern';
+                btn.disabled = false;
+                
+                resultDiv.classList.remove('result-show');
+                setTimeout(() => {
+                    resultDiv.textContent = `Fehler: ${error.message}`;
+                    resultDiv.style.color = '#ff6b6b';
+                    resultDiv.classList.add('result-show');
+                }, 100);
+            }
         }
         
         document.getElementById('polyInput').addEventListener('keypress', function(e) {
@@ -380,96 +452,347 @@
             }
         });
         
-        document.getElementById('polyInput').addEventListener('input', function(e) {
-            const input = e.target;
-            const value = input.value.trim();
+        // Advanced polynomial expansion function
+        function expandPolynomial(input) {
+            // Normalize the input
+            let normalized = normalizeInput(input);
             
-            if (value && !value.match(/^\([^)]*\)\([^)]*\)$/)) {
-                input.style.borderColor = '#ff6b6b';
-            } else {
-                input.style.borderColor = 'transparent';
+            // Try different parsing strategies
+            try {
+                // Strategy 1: Try factored form parsing
+                const factored = parseFactoredForm(normalized);
+                if (factored.length > 0) {
+                    return expandFromFactors(factored);
+                }
+            } catch (e) {
+                // Continue to next strategy
             }
-        });
-        // Function to expand a polynomial from factored form to standard form
-function expandPolynomial(input) {
-    // Step 1: Parse the input to extract roots
-    // Remove spaces and 'f(x)=' if present
-    input = input.replace(/\s/g, '').replace(/^f\(x\)=/, '');
-    
-    // Find all terms like (x+a) or (x-a) using regex
-    const termRegex = /\(x([+-]?\d*)\)/g;
-    let matches = [];
-    let match;
-    while ((match = termRegex.exec(input)) !== null) {
-        // Extract the number after x, default to +1 or -1 if no number
-        let num = match[1] === '+' ? 1 : match[1] === '-' ? -1 : parseInt(match[1] || '0');
-        matches.push(num);
-    }
-    
-    // If no matches, return error
-    if (matches.length === 0) {
-        return "Invalid input: No valid (x+a) or (x-a) terms found";
-    }
-    
-    // Step 2: Convert (x-a) to roots (a), so (x-1)(x+2) becomes roots [1, -2]
-    const roots = matches.map(num => -num);
-    
-    // Step 3: Expand the polynomial by multiplying binomials
-    // Start with [1] (represents 1, for the first multiplication)
-    let coeffs = [1];
-    
-    // Multiply by each (x - r) binomial
-    for (let r of roots) {
-        const newCoeffs = new Array(coeffs.length + 1).fill(0);
-        // Multiply current polynomial by (x - r)
-        for (let j = 0; j < coeffs.length; j++) {
-            // x term: coeffs[j] * x -> x^(j+1)
-            newCoeffs[j + 1] += coeffs[j];
-            // constant term: coeffs[j] * (-r) -> x^j
-            newCoeffs[j] += coeffs[j] * -r;
-        }
-        coeffs = newCoeffs;
-    }
-    
-    // Step 4: Format the output polynomial with Unicode superscripts
-    const superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-    let result = '';
-    for (let i = coeffs.length - 1; i >= 0; i--) {
-        let coeff = coeffs[i];
-        if (coeff === 0) continue; // Skip zero coefficients
-        
-        let term = '';
-        if (coeff > 0 && result !== '') {
-            term += '+';
-        } else if (coeff < 0) {
-            term += '-';
-            coeff = Math.abs(coeff);
+            
+            try {
+                // Strategy 2: Try already expanded form
+                const expanded = parseExpandedForm(normalized);
+                if (expanded) {
+                    return formatPolynomial(expanded);
+                }
+            } catch (e) {
+                // Continue to next strategy
+            }
+            
+            throw new Error("Konnte das Polynom nicht erkennen. Bitte überprüfen Sie die Eingabe.");
         }
         
-        if (i === 0) {
-            // Constant term
-            term += coeff;
-        } else if (i === 1) {
-            // x term
-            term += coeff === 1 ? 'x' : `${coeff}x`;
-        } else {
-            // x^n term
-            let expStr = i.toString().split('').map(digit => superscripts[parseInt(digit)]).join('');
-            term += coeff === 1 ? `x${expStr}` : `${coeff}x${expStr}`;
+        function normalizeInput(input) {
+            // Remove all spaces
+            let result = input.replace(/\s+/g, '');
+            
+            // Remove f(x)= prefix if present
+            result = result.replace(/^f\(x\)=/, '');
+            
+            // Convert Unicode superscripts to ^ notation
+            const superscriptMap = {
+                '⁰': '^0', '¹': '^1', '²': '^2', '³': '^3', '⁴': '^4',
+                '⁵': '^5', '⁶': '^6', '⁷': '^7', '⁸': '^8', '⁹': '^9'
+            };
+            
+            for (let [unicode, caret] of Object.entries(superscriptMap)) {
+                result = result.replace(new RegExp(unicode, 'g'), caret);
+            }
+            
+            // Add implicit multiplication signs
+            result = result.replace(/(\))(\()/g, '$1*$2'); // )(  -> )*(
+            result = result.replace(/(\d)(\()/g, '$1*$2');  // 2( -> 2*(
+            result = result.replace(/(\))([a-z])/g, '$1*$2'); // )x -> )*x
+            result = result.replace(/([a-z])(\()/g, '$1*$2'); // x( -> x*(
+            
+            return result;
         }
         
-        result += term;
-    }
-    
-    // Handle the case where the polynomial is zero
-    if (result === '') {
-        return '0';
-    }
-    
-    return result;
-}
-
-
+        function parseFactoredForm(input) {
+            const factors = [];
+            
+            // Find all parentheses groups with optional exponents
+            const factorRegex = /\(([^)]+)\)(\^?\d+|[²³⁴⁵⁶⁷⁸⁹])?/g;
+            let match;
+            
+            while ((match = factorRegex.exec(input)) !== null) {
+                const factorContent = match[1];
+                let exponent = 1;
+                
+                if (match[2]) {
+                    if (match[2].startsWith('^')) {
+                        exponent = parseInt(match[2].substring(1));
+                    } else {
+                        const superscriptMap = {'²': 2, '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8, '⁹': 9};
+                        exponent = superscriptMap[match[2]] || parseInt(match[2]);
+                    }
+                }
+                
+                // Parse the factor content
+                const factor = parseFactor(factorContent);
+                
+                // Add the factor 'exponent' times
+                for (let i = 0; i < exponent; i++) {
+                    factors.push(factor);
+                }
+            }
+            
+            // Also handle standalone x factors
+            const xFactorRegex = /(?<!\w)x(?!\w)(?!\^)(?![²³⁴⁵⁶⁷⁸⁹])/g;
+            let xMatch;
+            while ((xMatch = xFactorRegex.exec(input)) !== null) {
+                factors.push({ type: 'linear', a: 1, b: 0 }); // x = 1x + 0
+            }
+            
+            return factors;
+        }
+        
+        function parseFactor(factorStr) {
+            // Handle different formats: x+a, x-a, ax+b, ax-b, etc.
+            
+            // Try to match ax + b or ax - b format
+            let match = factorStr.match(/^([+-]?\d*\.?\d*\/?\d*)x([+-]\d*\.?\d*\/?\d*)$/);
+            if (match) {
+                let a = match[1];
+                if (a === '' || a === '+') a = '1';
+                if (a === '-') a = '-1';
+                
+                let b = match[2];
+                if (b === '+') b = '+1';
+                if (b === '-') b = '-1';
+                
+                return {
+                    type: 'linear',
+                    a: parseNumber(a),
+                    b: parseNumber(b)
+                };
+            }
+            
+            // Try to match just x (coefficient 1, constant 0)
+            if (factorStr === 'x') {
+                return { type: 'linear', a: 1, b: 0 };
+            }
+            
+            // Try to match ax (no constant term)
+            match = factorStr.match(/^([+-]?\d*\.?\d*\/?\d*)x$/);
+            if (match) {
+                let a = match[1];
+                if (a === '' || a === '+') a = '1';
+                if (a === '-') a = '-1';
+                
+                return {
+                    type: 'linear',
+                    a: parseNumber(a),
+                    b: 0
+                };
+            }
+            
+            // Try to match just a constant
+            match = factorStr.match(/^([+-]?\d*\.?\d*\/?\d*)$/);
+            if (match) {
+                return {
+                    type: 'constant',
+                    value: parseNumber(match[1])
+                };
+            }
+            
+            throw new Error(`Konnte Faktor nicht parsen: ${factorStr}`);
+        }
+        
+        function parseNumber(str) {
+            if (str.includes('/')) {
+                const [num, den] = str.split('/');
+                return parseFloat(num) / parseFloat(den);
+            }
+            return parseFloat(str);
+        }
+        
+        function parseExpandedForm(input) {
+            // Try to parse already expanded polynomial like x^2-3x+2
+            const terms = [];
+            
+            // Split by + and - while keeping the signs
+            const parts = input.split(/([+-])/).filter(part => part !== '');
+            
+            let currentSign = 1;
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
+                
+                if (part === '+') {
+                    currentSign = 1;
+                    continue;
+                } else if (part === '-') {
+                    currentSign = -1;
+                    continue;
+                }
+                
+                // Parse term like 3x^2, -2x, 5, etc.
+                const term = parseExpandedTerm(part, currentSign);
+                if (term) {
+                    terms.push(term);
+                }
+                currentSign = 1; // reset for next iteration
+            }
+            
+            if (terms.length === 0) {
+                return null;
+            }
+            
+            // Convert terms to coefficient array
+            const maxDegree = Math.max(...terms.map(t => t.degree));
+            const coeffs = new Array(maxDegree + 1).fill(0);
+            
+            for (const term of terms) {
+                coeffs[term.degree] += term.coefficient;
+            }
+            
+            return coeffs;
+        }
+        
+        function parseExpandedTerm(termStr, sign = 1) {
+            // Handle terms like 3x^2, x^2, 2x, x, 5
+            
+            // Remove leading + if present
+            if (termStr.startsWith('+')) {
+                termStr = termStr.substring(1);
+            }
+            
+            // Check for x^n pattern
+            let match = termStr.match(/^([+-]?\d*\.?\d*\/?\d*)x\^(\d+)$/);
+            if (match) {
+                let coeff = match[1];
+                if (coeff === '' || coeff === '+') coeff = '1';
+                if (coeff === '-') coeff = '-1';
+                
+                return {
+                    coefficient: sign * parseNumber(coeff),
+                    degree: parseInt(match[2])
+                };
+            }
+            
+            // Check for x pattern (degree 1)
+            match = termStr.match(/^([+-]?\d*\.?\d*\/?\d*)x$/);
+            if (match) {
+                let coeff = match[1];
+                if (coeff === '' || coeff === '+') coeff = '1';
+                if (coeff === '-') coeff = '-1';
+                
+                return {
+                    coefficient: sign * parseNumber(coeff),
+                    degree: 1
+                };
+            }
+            
+            // Check for constant term
+            match = termStr.match(/^([+-]?\d+\.?\d*\/?\d*)$/);
+            if (match) {
+                return {
+                    coefficient: sign * parseNumber(match[1]),
+                    degree: 0
+                };
+            }
+            
+            return null;
+        }
+        
+        function expandFromFactors(factors) {
+            // Start with polynomial "1"
+            let coeffs = [1];
+            
+            for (const factor of factors) {
+                if (factor.type === 'linear') {
+                    // Multiply by (ax + b)
+                    const newCoeffs = new Array(coeffs.length + 1).fill(0);
+                    
+                    for (let i = 0; i < coeffs.length; i++) {
+                        // ax term contribution: coeffs[i] * a * x^(i+1)
+                        newCoeffs[i + 1] += coeffs[i] * factor.a;
+                        // b term contribution: coeffs[i] * b * x^i
+                        newCoeffs[i] += coeffs[i] * factor.b;
+                    }
+                    
+                    coeffs = newCoeffs;
+                } else if (factor.type === 'constant') {
+                    // Multiply by constant
+                    for (let i = 0; i < coeffs.length; i++) {
+                        coeffs[i] *= factor.value;
+                    }
+                }
+            }
+            
+            return formatPolynomial(coeffs);
+        }
+        
+        function formatPolynomial(coeffs) {
+            const superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+            
+            let result = '';
+            let hasTerms = false;
+            
+            // Process from highest degree to lowest
+            for (let degree = coeffs.length - 1; degree >= 0; degree--) {
+                let coeff = coeffs[degree];
+                
+                // Skip zero coefficients
+                if (Math.abs(coeff) < 1e-10) continue;
+                
+                let term = '';
+                
+                // Handle sign
+                if (coeff > 0 && hasTerms) {
+                    term += '+';
+                } else if (coeff < 0) {
+                    term += '-';
+                    coeff = Math.abs(coeff);
+                }
+                
+                // Handle coefficient
+                if (degree === 0) {
+                    // Constant term
+                    term += formatNumber(coeff);
+                } else if (degree === 1) {
+                    // Linear term
+                    if (Math.abs(coeff - 1) < 1e-10) {
+                        term += 'x';
+                    } else {
+                        term += formatNumber(coeff) + 'x';
+                    }
+                } else {
+                    // Higher degree term
+                    if (Math.abs(coeff - 1) < 1e-10) {
+                        term += 'x';
+                    } else {
+                        term += formatNumber(coeff) + 'x';
+                    }
+                    
+                    // Add superscript exponent
+                    const expStr = degree.toString().split('').map(digit => superscripts[parseInt(digit)]).join('');
+                    term += expStr;
+                }
+                
+                result += term;
+                hasTerms = true;
+            }
+            
+            return result || '0';
+        }
+        
+        function formatNumber(num) {
+            // Handle fractions and decimals nicely
+            if (num % 1 === 0) {
+                return num.toString();
+            } else {
+                // Try to represent as fraction if it's a simple one
+                const tolerance = 1e-10;
+                for (let den = 2; den <= 20; den++) {
+                    const numerator = Math.round(num * den);
+                    if (Math.abs(num - numerator / den) < tolerance) {
+                        return `${numerator}/${den}`;
+                    }
+                }
+                // Otherwise use decimal
+                return num.toFixed(6).replace(/\.?0+$/, '');
+            }
+        }
     </script>
 </body>
 </html>
