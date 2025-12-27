@@ -1,735 +1,207 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>finn polynom rechner</title>
+    <title>nexveil | #1 lua whitelist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" media="print" onload="this.media='all'; this.onload = null;" href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        :root {
+            --text-color: #666;
+            --text-alt-color: #9a9a9a;
+            --text-color-contrast: white;
+            --bg-color: #fff;
+            --primary-color: #9a5fb4;
+            --secondary-color: #173d7a;
+            --accent-color: #543a93;
+            --alt-color: #cb75dc;
+            --nav-color: white;
+            --box-shadow-color: #0000001a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        :root {
-            --bg-primary: #0f0f23;
-            --bg-secondary: #161628;
-            --bg-card: #1a1a2e;
-            --accent-sandy: #d4a574;
-            --accent-sandy-dark: #b8935f;
-            --text-primary: #e8e8f0;
-            --text-secondary: #a8a8b8;
-            --shadow-dark: rgba(0, 0, 0, 0.3);
-            --shadow-light: rgba(255, 255, 255, 0.05);
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.12);
-        }
-        
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            -webkit-locale: "en";
+            background: linear-gradient(var(--primary-color), var(--accent-color));
+            min-width: 320px;
+            transition: background .3s;
+            width: 100%;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            color: var(--text-color);
+            font-family: Cabin, sans-serif;
+            line-height: 1.5;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
             position: relative;
-            overflow-x: hidden;
         }
-        
-        /* Animated background particles */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(212, 165, 116, 0.06) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-            z-index: -1;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(1deg); }
-        }
-        
+
         .container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 
-                0 20px 40px var(--shadow-dark),
-                inset 0 1px 0 var(--shadow-light);
-            animation: slideUp 0.8s ease-out;
-            position: relative;
         }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        h1 {
-            color: var(--text-primary);
-            font-size: 2.5rem;
+
+        .logo {
+            font-family: Poppins, sans-serif;
+            font-size: clamp(48px, 8vw, 72px);
             font-weight: 700;
-            text-align: center;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-sandy) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow 2s ease-in-out infinite alternate;
+            color: var(--text-color-contrast);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
         }
-        
-        @keyframes glow {
-            from { filter: brightness(1); }
-            to { filter: brightness(1.1); }
+
+        .tagline {
+            font-family: Cabin, sans-serif;
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 3rem;
         }
-        
-        .subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 0.9rem;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 0.3s forwards;
+
+        .card {
+            background: var(--nav-color);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px var(--box-shadow-color);
+            margin: 0 auto;
+            max-width: 600px;
         }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
         }
-        
-        .input-group {
-            margin-bottom: 30px;
-        }
-        
-        label {
-            display: block;
-            color: var(--text-primary);
-            font-weight: 500;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-        
-        .input-wrapper {
-            position: relative;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 18px 24px;
-            background: var(--bg-card);
-            border: 2px solid transparent;
-            border-radius: 16px;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                inset 8px 8px 16px var(--shadow-dark),
-                inset -8px -8px 16px var(--shadow-light);
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent-sandy);
-            box-shadow: 
-                inset 8px 8px 16px var(--shadow-dark),
-                inset -8px -8px 16px var(--shadow-light),
-                0 0 0 4px rgba(212, 165, 116, 0.1);
-            transform: translateY(-1px);
-        }
-        
-        input[type="text"]::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.6;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 18px 24px;
-            background: linear-gradient(135deg, var(--accent-sandy) 0%, var(--accent-sandy-dark) 100%);
-            border: none;
-            border-radius: 16px;
-            color: var(--bg-primary);
-            font-size: 1.1rem;
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary-color);
+            color: var(--text-color-contrast);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-family: Poppins, sans-serif;
+            font-size: 13px;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                8px 8px 16px var(--shadow-dark),
-                -8px -8px 16px var(--shadow-light);
-            position: relative;
-            overflow: hidden;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
         }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-color-contrast);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                12px 12px 24px var(--shadow-dark),
-                -12px -12px 24px var(--shadow-light);
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 
-                4px 4px 8px var(--shadow-dark),
-                -4px -4px 8px var(--shadow-light);
-        }
-        
-        .result-container {
-            margin-top: 30px;
-            min-height: 80px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 
-                inset 4px 4px 8px var(--shadow-dark),
-                inset -4px -4px 8px var(--shadow-light);
-            transition: all 0.3s ease;
-        }
-        
-        #result {
-            color: var(--text-primary);
-            font-size: 1.3rem;
-            font-weight: 500;
-            text-align: center;
-            word-break: break-all;
-            line-height: 1.5;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .result-show {
-            animation: resultSlide 0.5s ease-out;
-        }
-        
-        @keyframes resultSlide {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
+
+        @keyframes pulse {
+            0%, 100% {
                 opacity: 1;
-                transform: translateY(0);
+            }
+            50% {
+                opacity: 0.4;
             }
         }
-        
-        .examples {
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 
-                inset 4px 4px 8px var(--shadow-dark),
-                inset -4px -4px 8px var(--shadow-light);
+
+        .main-text {
+            font-family: Poppins, sans-serif;
+            font-size: clamp(32px, 5vw, 42px);
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            line-height: 1.2;
         }
-        
-        .examples h3 {
-            color: var(--accent-sandy);
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .example-list {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+
+        .sub-text {
+            font-family: Cabin, sans-serif;
+            font-size: clamp(16px, 2.5vw, 18px);
+            font-weight: 400;
+            color: var(--text-color);
             line-height: 1.6;
         }
-        
-        .example-item {
-            margin-bottom: 8px;
-            font-family: 'Courier New', monospace;
-            background: rgba(212, 165, 116, 0.1);
-            padding: 4px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
         }
-        
-        .example-item:hover {
-            background: rgba(212, 165, 116, 0.2);
-            color: var(--text-primary);
-        }
-        
-        .credits {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 8px 16px;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            z-index: 100;
-        }
-        
-        .credits:hover {
-            opacity: 1;
-        }
-        
-        .credits a {
-            color: var(--accent-sandy);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 600px) {
+
+        @media (max-width: 480px) {
             .container {
-                padding: 30px 20px;
-                margin: 0 10px;
+                padding: 1rem;
             }
             
-            h1 {
-                font-size: 2rem;
+            .logo {
+                margin-bottom: 0.5rem;
             }
             
-            .credits {
-                position: relative;
-                bottom: auto;
-                right: auto;
-                margin-top: 20px;
-                text-align: center;
+            .tagline {
+                margin-bottom: 2rem;
             }
         }
-        
-        /* Loading animation */
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent-sandy);
+        .bubble {
+            position: absolute;
             border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            pointer-events: none;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+
+        .bubble-1 {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -100px;
+        }
+
+        .bubble-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .bubble-3 {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 10%;
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
+     
     <div class="container">
-        <h1>finn polynom rechner</h1>
-        <p class="subtitle">Erweitere Polynome in verschiedensten Formaten zu ihrer Standardform</p>
+        <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-3"></div>
+        <div class="logo">nexveil</div>
+        <div class="tagline">#1 lua whitelist</div>
         
-        <div class="input-group">
-            <label for="polyInput">Polynom eingeben (unterstützt viele Formate):</label>
-            <div class="input-wrapper">
-                <input type="text" id="polyInput" placeholder="z.B. (x-1)²(x+2) oder (x-1)^2*(x+2) oder x²-3x+2" autocomplete="off">
+        <div class="card">
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                In Development
             </div>
-        </div>
-        
-        <button class="btn" onclick="expandAndShow()">
-            <span id="btnText">Erweitern</span>
-        </button>
-        
-        <div class="result-container">
-            <div id="result">Geben Sie ein Polynom ein und klicken Sie auf "Erweitern"</div>
-        </div>
-        
-        <div class="examples">
-            <h3>Unterstützte Formate (klicken zum Testen):</h3>
-            <div class="example-list">
-                <div class="example-item" onclick="setExample('(x-1)(x+2)')">(x-1)(x+2) - Einfache Faktoren</div>
-                <div class="example-item" onclick="setExample('(x-1)²(x+2)')">(x-1)²(x+2) - Mit Unicode Exponenten</div>
-                <div class="example-item" onclick="setExample('(x-1)^2*(x+2)')">(x-1)^2*(x+2) - Mit ^ Exponenten</div>
-                <div class="example-item" onclick="setExample('(2x-4)(x+3)')">(2x-4)(x+3) - Mit Koeffizienten</div>
-                <div class="example-item" onclick="setExample('x²-5x+6')">x²-5x+6 - Bereits erweitert</div>
-                <div class="example-item" onclick="setExample('(x-1)³')">(x-1)³ - Höhere Potenzen</div>
-                <div class="example-item" onclick="setExample('(x+0.5)(x-2.5)')">(x+0.5)(x-2.5) - Dezimalzahlen</div>
-                <div class="example-item" onclick="setExample('(x-1/2)(x+3/4)')">(x-1/2)(x+3/4) - Brüche</div>
-                <div class="example-item" onclick="setExample('(x^2+4x)(x-2)(x^2+8x-4)')">(x^2+4x)(x-2)(x^2+8x-4) - Komplexe Faktoren</div>
-            </div>
+            <h1 class="main-text">Releasing Soon</h1>
+            <p class="sub-text">
+                The <span class="highlight">best Luau whitelist</span> is coming.<br>
+                fr frrr.
+            </p>
         </div>
     </div>
-    
-    <div class="credits">
-        Erstellt von <a href="#" target="_blank">Finn</a>
-    </div>
-
-    <script>
-        function setExample(example) {
-            document.getElementById('polyInput').value = example;
-            expandAndShow();
-        }
-        
-        async function expandAndShow() {
-            const input = document.getElementById('polyInput').value.trim();
-            const resultDiv = document.getElementById('result');
-            const btnText = document.getElementById('btnText');
-            const btn = document.querySelector('.btn');
-            
-            if (!input) {
-                resultDiv.textContent = "Bitte geben Sie ein Polynom ein";
-                resultDiv.style.color = "var(--accent-sandy)";
-                return;
-            }
-            
-            btn.classList.add('loading');
-            btnText.textContent = 'Berechnung...';
-            btn.disabled = true;
-            
-            await new Promise(resolve => setTimeout(resolve, 300));
-            
-            try {
-                const result = expandPolynomial(input);
-                
-                btn.classList.remove('loading');
-                btnText.textContent = 'Erweitern';
-                btn.disabled = false;
-                
-                resultDiv.classList.remove('result-show');
-                setTimeout(() => {
-                    resultDiv.textContent = result;
-                    resultDiv.style.color = result.includes('Error') || result.includes('Fehler') ? '#ff6b6b' : 'var(--accent-sandy)';
-                    resultDiv.classList.add('result-show');
-                }, 100);
-            } catch (error) {
-                btn.classList.remove('loading');
-                btnText.textContent = 'Erweitern';
-                btn.disabled = false;
-                
-                resultDiv.classList.remove('result-show');
-                setTimeout(() => {
-                    resultDiv.textContent = `Fehler: ${error.message}`;
-                    resultDiv.style.color = '#ff6b6b';
-                    resultDiv.classList.add('result-show');
-                }, 100);
-            }
-        }
-        
-        document.getElementById('polyInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                expandAndShow();
-            }
-        });
-        
-        // Advanced polynomial expansion function
-        function expandPolynomial(input) {
-            try {
-                // Normalize the input
-                let normalized = normalizeInput(input);
-                
-                // Parse as a product of polynomial factors
-                const factors = parsePolynomialFactors(normalized);
-                
-                // Multiply all factors together
-                let result = [1]; // Start with polynomial "1"
-                
-                for (const factor of factors) {
-                    result = multiplyPolynomials(result, factor);
-                }
-                
-                return formatPolynomial(result);
-            } catch (error) {
-                throw new Error(`Fehler beim Erweitern: ${error.message}`);
-            }
-        }
-        
-        function normalizeInput(input) {
-            // Remove all spaces
-            let result = input.replace(/\s+/g, '');
-            
-            // Remove f(x)= prefix if present
-            result = result.replace(/^f\(x\)=/, '');
-            
-            // Convert Unicode superscripts to ^ notation
-            const superscriptMap = {
-                '⁰': '^0', '¹': '^1', '²': '^2', '³': '^3', '⁴': '^4',
-                '⁵': '^5', '⁶': '^6', '⁷': '^7', '⁸': '^8', '⁹': '^9'
-            };
-            
-            for (let [unicode, caret] of Object.entries(superscriptMap)) {
-                result = result.replace(new RegExp(unicode, 'g'), caret);
-            }
-            
-            // Add implicit multiplication signs
-            result = result.replace(/(\))(\()/g, '$1*$2'); // )(  -> )*(
-            result = result.replace(/(\d)(\()/g, '$1*$2');  // 2( -> 2*(
-            result = result.replace(/(\))([a-z])/g, '$1*$2'); // )x -> )*x
-            result = result.replace(/([a-z])(\()/g, '$1*$2'); // x( -> x*(
-            
-            return result;
-        }
-        
-        function parsePolynomialFactors(input) {
-            const factors = [];
-            let remaining = input;
-            
-            // First, handle any leading coefficient or x terms outside parentheses
-            const leadingMatch = remaining.match(/^([+-]?\d*\.?\d*\/?\d*x?\^?\d*)/);
-            if (leadingMatch && leadingMatch[1] && leadingMatch[1] !== '') {
-                const leadingTerm = leadingMatch[1];
-                if (leadingTerm.includes('x') && !leadingTerm.includes('(')) {
-                    const poly = parsePolynomialFromString(leadingTerm);
-                    if (poly.some(c => c !== 0)) {
-                        factors.push(poly);
-                    }
-                    remaining = remaining.substring(leadingMatch[0].length);
-                }
-            }
-            
-            // Find all parentheses groups with optional exponents
-            const factorRegex = /\(([^)]+)\)(\^?\d+|[²³⁴⁵⁶⁷⁸⁹])?/g;
-            let match;
-            
-            while ((match = factorRegex.exec(remaining)) !== null) {
-                const factorContent = match[1];
-                let exponent = 1;
-                
-                if (match[2]) {
-                    if (match[2].startsWith('^')) {
-                        exponent = parseInt(match[2].substring(1));
-                    } else {
-                        const superscriptMap = {'²': 2, '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8, '⁹': 9};
-                        exponent = superscriptMap[match[2]] || parseInt(match[2]);
-                    }
-                }
-                
-                // Parse the polynomial inside parentheses
-                const baseFactor = parsePolynomialFromString(factorContent);
-                
-                // Add the factor 'exponent' times
-                for (let i = 0; i < exponent; i++) {
-                    factors.push(baseFactor);
-                }
-            }
-            
-            // If no factors found, try to parse the whole thing as a single polynomial
-            if (factors.length === 0) {
-                const singlePoly = parsePolynomialFromString(input);
-                if (singlePoly.some(c => c !== 0)) {
-                    factors.push(singlePoly);
-                }
-            }
-            
-            return factors;
-        }
-        
-        function parsePolynomialFromString(polyStr) {
-            // Parse a polynomial string like "x^2+4x-3" or "2x-1" into coefficient array
-            if (!polyStr || polyStr.trim() === '') {
-                return [0];
-            }
-            
-            // Handle just "x" case
-            if (polyStr === 'x') {
-                return [0, 1]; // 0 + 1x
-            }
-            
-            // Split into terms, preserving signs
-            const terms = [];
-            const termRegex = /([+-]?[^+-]+)/g;
-            let match;
-            
-            while ((match = termRegex.exec(polyStr)) !== null) {
-                const term = match[1].trim();
-                if (term) {
-                    terms.push(term);
-                }
-            }
-            
-            // Parse each term
-            const termData = [];
-            
-            for (let term of terms) {
-                // Remove leading + if present
-                if (term.startsWith('+')) {
-                    term = term.substring(1);
-                }
-                
-                let coefficient = 0;
-                let degree = 0;
-                
-                if (term.includes('x')) {
-                    // Extract coefficient and degree
-                    const xIndex = term.indexOf('x');
-                    const coeffPart = term.substring(0, xIndex);
-                    const expPart = term.substring(xIndex + 1);
-                    
-                    // Parse coefficient
-                    if (coeffPart === '' || coeffPart === '+') {
-                        coefficient = 1;
-                    } else if (coeffPart === '-') {
-                        coefficient = -1;
-                    } else {
-                        coefficient = parseNumber(coeffPart);
-                    }
-                    
-                    // Parse exponent
-                    if (expPart === '') {
-                        degree = 1;
-                    } else if (expPart.startsWith('^')) {
-                        degree = parseInt(expPart.substring(1));
-                    } else {
-                        // Handle superscript
-                        const superscriptMap = {'²': 2, '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8, '⁹': 9};
-                        degree = superscriptMap[expPart] || parseInt(expPart);
-                    }
-                } else {
-                    // Constant term
-                    coefficient = parseNumber(term);
-                    degree = 0;
-                }
-                
-                termData.push({ coefficient, degree });
-            }
-            
-            if (termData.length === 0) {
-                return [0];
-            }
-            
-            // Convert to coefficient array
-            const maxDegree = Math.max(...termData.map(t => t.degree));
-            const coeffs = new Array(maxDegree + 1).fill(0);
-            
-            for (const term of termData) {
-                coeffs[term.degree] += term.coefficient;
-            }
-            
-            return coeffs;
-        }
-        
-        function multiplyPolynomials(poly1, poly2) {
-            // Multiply two polynomials represented as coefficient arrays
-            const result = new Array(poly1.length + poly2.length - 1).fill(0);
-            
-            for (let i = 0; i < poly1.length; i++) {
-                for (let j = 0; j < poly2.length; j++) {
-                    result[i + j] += poly1[i] * poly2[j];
-                }
-            }
-            
-            return result;
-        }
-        
-        function parseNumber(str) {
-            if (str.includes('/')) {
-                const [num, den] = str.split('/');
-                return parseFloat(num) / parseFloat(den);
-            }
-            return parseFloat(str);
-        }
-        
-        function formatPolynomial(coeffs) {
-            const superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-            
-            let result = '';
-            let hasTerms = false;
-            
-            // Process from highest degree to lowest
-            for (let degree = coeffs.length - 1; degree >= 0; degree--) {
-                let coeff = coeffs[degree];
-                
-                // Skip zero coefficients
-                if (Math.abs(coeff) < 1e-10) continue;
-                
-                let term = '';
-                
-                // Handle sign
-                if (coeff > 0 && hasTerms) {
-                    term += '+';
-                } else if (coeff < 0) {
-                    term += '-';
-                    coeff = Math.abs(coeff);
-                }
-                
-                // Handle coefficient
-                if (degree === 0) {
-                    // Constant term
-                    term += formatNumber(coeff);
-                } else if (degree === 1) {
-                    // Linear term
-                    if (Math.abs(coeff - 1) < 1e-10) {
-                        term += 'x';
-                    } else {
-                        term += formatNumber(coeff) + 'x';
-                    }
-                } else {
-                    // Higher degree term
-                    if (Math.abs(coeff - 1) < 1e-10) {
-                        term += 'x';
-                    } else {
-                        term += formatNumber(coeff) + 'x';
-                    }
-                    
-                    // Add superscript exponent
-                    const expStr = degree.toString().split('').map(digit => superscripts[parseInt(digit)]).join('');
-                    term += expStr;
-                }
-                
-                result += term;
-                hasTerms = true;
-            }
-            
-            return result || '0';
-        }
-        
-        function formatNumber(num) {
-            // Handle fractions and decimals nicely
-            if (num % 1 === 0) {
-                return num.toString();
-            } else {
-                // Try to represent as fraction if it's a simple one
-                const tolerance = 1e-10;
-                for (let den = 2; den <= 20; den++) {
-                    const numerator = Math.round(num * den);
-                    if (Math.abs(num - numerator / den) < tolerance) {
-                        return `${numerator}/${den}`;
-                    }
-                }
-                // Otherwise use decimal
-                return num.toFixed(6).replace(/\.?0+$/, '');
-            }
-        }
-    </script>
 </body>
 </html>
